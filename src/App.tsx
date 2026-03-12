@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, ReactNode, createContext, useContex
 import { useWebHaptics } from 'web-haptics/react';
 
 const TRIP_DATE = new Date('2026-06-15T12:00:00'); // Set a future date
+const BASE_URL = '/eds-30th/';
 
 const HapticsContext = createContext<{ trigger: (pattern?: any) => void }>({
   trigger: () => {},
@@ -175,7 +176,7 @@ const HeroSection = ({ onEdClick }: { onEdClick: () => void }) => {
         
         <div className="w-full max-w-md mb-12">
           <TripImageCard
-            src="/eds-30th/Gemini_Generated_Image_25vw7u25vw7u25vw.png"
+            src={`${BASE_URL}Gemini_Generated_Image_25vw7u25vw7u25vw.png`}
             alt="Ed and a friend celebrating outside the Stella Artois brewery in Leuven"
             delay={0.8}
           />
@@ -250,7 +251,7 @@ const DestinationSection = () => {
         
         <div className={`flex-1 w-full ${visible ? 'animate-slideInRight' : 'opacity-0'}`}>
           <TripImageCard
-            src="/eds-30th/Gemini_Generated_Image_kakhztkakhztkakh2.png"
+            src={`${BASE_URL}Gemini_Generated_Image_kakhztkakhztkakh2.png`}
             alt="Two friends arriving in Brussels at night on the Grand Place with suitcases" 
           />
         </div>
@@ -305,31 +306,31 @@ const ItinerarySection = () => {
     {
       icon: '🍺',
       title: 'Stella Brewery Tour – Leuven',
-      imageSrc: '/Gemini_Generated_Image_25vw7u25vw7u25vw.png',
+      imageSrc: `${BASE_URL}Gemini_Generated_Image_25vw7u25vw7u25vw.png`,
       imageAlt: 'Friends celebrating outside the Stella Artois brewery in Leuven'
     },
     {
       icon: '🌆',
       title: 'Grand Place at Night – Brussels',
-      imageSrc: '/Gemini_Generated_Image_kakhztkakhztkakh3.png',
+      imageSrc: `${BASE_URL}Gemini_Generated_Image_kakhztkakhztkakh3.png`,
       imageAlt: 'Two friends with suitcases in the Grand Place at night'
     },
     {
       icon: '🧇',
       title: 'Waffles & Manneken Pis',
-      imageSrc: '/Gemini_Generated_Image_kakhztkakhztkakh4.png',
+      imageSrc: `${BASE_URL}Gemini_Generated_Image_kakhztkakhztkakh4.png`,
       imageAlt: 'Friends sharing Belgian waffles with Manneken Pis in the window'
     },
     {
       icon: '🏛️',
       title: 'Royal Palace Flag Wave',
-      imageSrc: '/Gemini_Generated_Image_kakhztkakhztkakh1.png',
+      imageSrc: `${BASE_URL}Gemini_Generated_Image_kakhztkakhztkakh1.png`,
       imageAlt: 'Friends holding Belgian flags outside the Royal Palace'
     },
     {
       icon: '🔬',
       title: 'Atomium Adventure',
-      imageSrc: '/Gemini_Generated_Image_kakhztkakhztkakh2.png',
+      imageSrc: `${BASE_URL}Gemini_Generated_Image_kakhztkakhztkakh2.png`,
       imageAlt: 'Friends at the Atomium with a model in hand'
     }
   ];
@@ -472,7 +473,7 @@ const PersonalNoteSection = () => {
           <div className="relative">
             <div className="absolute inset-0 rounded-2xl animate-pulse-glow"></div>
             <TripImageCard
-              src="/eds-30th/Gemini_Generated_Image_kakhztkakhztkakh3.png"
+              src={`${BASE_URL}Gemini_Generated_Image_kakhztkakhztkakh3.png`}
               alt="Two friends laughing over a huge plate of Belgian waffles"
               minHeight="300px"
             />
@@ -509,7 +510,7 @@ const GetYourLiverReadySection = () => {
 
         <div className={`w-full max-w-xl ${visible ? 'animate-zoomBounce' : 'opacity-0'}`}>
           <TripImageCard
-            src="/eds-30th/image13.png"
+            src={`${BASE_URL}image13.png`}
             alt="Two friends toasting with beers in front of Brussels town hall"
             minHeight="420px"
           />
@@ -565,7 +566,7 @@ const FooterSection = () => {
 
       <div className="mt-12 max-w-xl mx-auto">
         <TripImageCard
-          src="/eds-30th/image12.png"
+          src={`${BASE_URL}image12.png`}
           alt="Ed's 30th celebration illustration with a giant Stella glass"
           minHeight="420px"
         />
@@ -573,7 +574,7 @@ const FooterSection = () => {
 
       <div className="mt-8 max-w-xl mx-auto">
         <TripImageCard
-          src="/eds-30th/image14.png"
+          src={`${BASE_URL}image14.png`}
           alt="Two partners sharing a kiss on a nighttime Belgian street"
           minHeight="420px"
         />
