@@ -166,7 +166,7 @@ const HeroSection = ({ onEdClick }: { onEdClick: () => void }) => {
         
         <div className="w-full max-w-md mb-12">
           <TripImageCard
-            src="/Gemini_Generated_Image_25vw7u25vw7u25vw.png"
+            src="/eds-30th/Gemini_Generated_Image_25vw7u25vw7u25vw.png"
             alt="Ed and a friend celebrating outside the Stella Artois brewery in Leuven"
             delay={0.8}
           />
@@ -241,7 +241,7 @@ const DestinationSection = () => {
         
         <div className={`flex-1 w-full ${visible ? 'animate-slideInRight' : 'opacity-0'}`}>
           <TripImageCard
-            src="/Gemini_Generated_Image_kakhztkakhztkakh2.png"
+            src="/eds-30th/Gemini_Generated_Image_kakhztkakhztkakh2.png"
             alt="Two friends arriving in Brussels at night on the Grand Place with suitcases" 
           />
         </div>
@@ -463,7 +463,7 @@ const PersonalNoteSection = () => {
           <div className="relative">
             <div className="absolute inset-0 rounded-2xl animate-pulse-glow"></div>
             <TripImageCard
-              src="/Gemini_Generated_Image_kakhztkakhztkakh3.png"
+              src="/eds-30th/Gemini_Generated_Image_kakhztkakhztkakh3.png"
               alt="Two friends laughing over a huge plate of Belgian waffles"
               minHeight="300px"
             />
@@ -500,7 +500,7 @@ const GetYourLiverReadySection = () => {
 
         <div className={`w-full max-w-xl ${visible ? 'animate-zoomBounce' : 'opacity-0'}`}>
           <TripImageCard
-            src="/image13.png"
+            src="/eds-30th/image13.png"
             alt="Two friends toasting with beers in front of Brussels town hall"
             minHeight="420px"
           />
@@ -556,7 +556,7 @@ const FooterSection = () => {
 
       <div className="mt-12 max-w-xl mx-auto">
         <TripImageCard
-          src="/image12.png"
+          src="/eds-30th/image12.png"
           alt="Ed's 30th celebration illustration with a giant Stella glass"
           minHeight="420px"
         />
@@ -564,7 +564,7 @@ const FooterSection = () => {
 
       <div className="mt-8 max-w-xl mx-auto">
         <TripImageCard
-          src="/image14.png"
+          src="/eds-30th/image14.png"
           alt="Two partners sharing a kiss on a nighttime Belgian street"
           minHeight="420px"
         />
