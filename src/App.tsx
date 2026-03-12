@@ -1,21 +1,30 @@
-import React, { useState, useEffect, useRef, ReactNode } from 'react';
+import React, { useState, useEffect, useRef, ReactNode, createContext, useContext } from 'react';
+import { useWebHaptics } from 'web-haptics/react';
 
 const TRIP_DATE = new Date('2026-06-15T12:00:00'); // Set a future date
+
+const HapticsContext = createContext<{ trigger: (pattern?: any) => void }>({
+  trigger: () => {},
+});
 
 // --- HOOKS ---
 function useScrollReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const { trigger } = useContext(HapticsContext);
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setVisible(true);
+        if (entry.isIntersecting) {
+          setVisible(true);
+          trigger();
+        }
       },
       { threshold }
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
-  }, [threshold]);
+  }, [threshold, trigger]);
   return [ref, visible] as const;
 }
 
@@ -718,6 +727,7 @@ export default function App() {
   const [edClicks, setEdClicks] = useState(0);
   const [blueMoonMode, setBlueMoonMode] = useState(false);
   const [goalCelebration, setGoalCelebration] = useState(false);
+  const { trigger } = useWebHaptics();
 
   const handleEdClick = () => {
     const newClicks = edClicks + 1;
@@ -736,37 +746,39 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-1000 ${blueMoonMode ? 'bg-city-blue' : ''} ${goalCelebration ? 'animate-shake' : ''}`}>
-      <StickyHeader />
-      <CursorCompanion />
-      <KonamiCode onTrigger={handleKonami} />
-      <IdleAnimation />
+    <HapticsContext.Provider value={{ trigger }}>
+      <div className={`min-h-screen transition-colors duration-1000 ${blueMoonMode ? 'bg-city-blue' : ''} ${goalCelebration ? 'animate-shake' : ''}`}>
+        <StickyHeader />
+        <CursorCompanion />
+        <KonamiCode onTrigger={handleKonami} />
+        <IdleAnimation />
 
-      {blueMoonMode && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none bg-city-blue/80">
-          <h1 className="text-6xl md:text-9xl font-fredoka text-white animate-pulse text-shadow-cartoon">BLUE MOON</h1>
-        </div>
-      )}
-
-      {goalCelebration && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-          <ConfettiBurst active={true} />
-          <h1 className="text-8xl md:text-[150px] font-fredoka text-stella-red animate-tada text-shadow-cartoon">GOAL! ⚽</h1>
-          <div className="absolute inset-0 flex justify-around items-start overflow-hidden">
-            {['🎉', '⚽', '🍺', '🏆'].map((emoji, i) => (
-              <div key={i} className="text-6xl animate-confettiFall" style={{ animationDelay: `${i * 0.2}s`, animationDuration: '2s' }}>{emoji}</div>
-            ))}
+        {blueMoonMode && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none bg-city-blue/80">
+            <h1 className="text-6xl md:text-9xl font-fredoka text-white animate-pulse text-shadow-cartoon">BLUE MOON</h1>
           </div>
-        </div>
-      )}
+        )}
 
-      <HeroSection onEdClick={handleEdClick} />
-      <DestinationSection />
-      <ItinerarySection />
-      <FootballSection />
-      <PersonalNoteSection />
-      <GetYourLiverReadySection />
-      <FooterSection />
-    </div>
+        {goalCelebration && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+            <ConfettiBurst active={true} />
+            <h1 className="text-8xl md:text-[150px] font-fredoka text-stella-red animate-tada text-shadow-cartoon">GOAL! ⚽</h1>
+            <div className="absolute inset-0 flex justify-around items-start overflow-hidden">
+              {['🎉', '⚽', '🍺', '🏆'].map((emoji, i) => (
+                <div key={i} className="text-6xl animate-confettiFall" style={{ animationDelay: `${i * 0.2}s`, animationDuration: '2s' }}>{emoji}</div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <HeroSection onEdClick={handleEdClick} />
+        <DestinationSection />
+        <ItinerarySection />
+        <FootballSection />
+        <PersonalNoteSection />
+        <GetYourLiverReadySection />
+        <FooterSection />
+      </div>
+    </HapticsContext.Provider>
   );
 }
