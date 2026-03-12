@@ -1,31 +1,24 @@
-import React, { useState, useEffect, useRef, ReactNode, createContext, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useWebHaptics } from 'web-haptics/react';
 
 const BASE_URL = '/eds-30th/';
-
-const HapticsContext = createContext<{ trigger: (pattern?: any) => void }>({
-  trigger: () => {},
-});
 
 // --- HOOKS ---
 function useScrollReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-  const { trigger } = useContext(HapticsContext);
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setVisible(true);
-          // Use a noticeable preset so haptics are obvious on scroll
-          trigger('nudge');
         }
       },
       { threshold }
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
-  }, [threshold, trigger]);
+  }, [threshold]);
   return [ref, visible] as const;
 }
 
@@ -728,7 +721,25 @@ export default function App() {
   const [edClicks, setEdClicks] = useState(0);
   const [blueMoonMode, setBlueMoonMode] = useState(false);
   const [goalCelebration, setGoalCelebration] = useState(false);
-  const { trigger } = useWebHaptics();
+  const { trigger } = useWebHaptics({debug: true});
+
+  // Fire haptics on scroll DOM events (throttled)
+  useEffect(() => {
+    let lastTrigger = 0;
+
+    const onScroll = () => {
+      const now = Date.now();
+      if (now - lastTrigger > 500) {
+        trigger([
+          { duration: 1000 },
+        ], { intensity: 1 });
+        lastTrigger = now;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [trigger]);
 
   const handleEdClick = () => {
     const newClicks = edClicks + 1;
@@ -747,39 +758,49 @@ export default function App() {
   };
 
   return (
-    <HapticsContext.Provider value={{ trigger }}>
-      <div className={`min-h-screen transition-colors duration-1000 ${blueMoonMode ? 'bg-city-blue' : ''} ${goalCelebration ? 'animate-shake' : ''}`}>
-        <StickyHeader />
-        <CursorCompanion />
-        <KonamiCode onTrigger={handleKonami} />
-        <IdleAnimation />
+    <div onMouseDown={() => trigger([
+      { duration: 1000 },
+    ], { intensity: 1 })}
+    onScroll={() => trigger([
+      { duration: 1000 },
+    ], { intensity: 1 })}
+    onTouchStart={() => trigger([
+      { duration: 1000 },
+    ], { intensity: 1 })} 
+    onTouchMove={() => trigger([
+      { duration: 1000 },
+    ], { intensity: 1 })} 
+    className={`min-h-screen transition-colors duration-1000 ${blueMoonMode ? 'bg-city-blue' : ''} ${goalCelebration ? 'animate-shake' : ''}`}>
+      <StickyHeader />
+      <CursorCompanion />
+      <KonamiCode onTrigger={handleKonami} />
+      <IdleAnimation />
 
-        {blueMoonMode && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none bg-city-blue/80">
-            <h1 className="text-6xl md:text-9xl font-fredoka text-white animate-pulse text-shadow-cartoon">BLUE MOON</h1>
+      {blueMoonMode && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none bg-city-blue/80">
+          <h1 className="text-6xl md:text-9xl font-fredoka text-white animate-pulse text-shadow-cartoon">BLUE MOON</h1>
+        </div>
+      )}
+
+      {goalCelebration && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+          <ConfettiBurst active={true} />
+          <h1 className="text-8xl md:text-[150px] font-fredoka text-stella-red animate-tada text-shadow-cartoon">GOAL! ⚽</h1>
+          <div className="absolute inset-0 flex justify-around items-start overflow-hidden">
+            {['🎉', '⚽', '🍺', '🏆'].map((emoji, i) => (
+              <div key={i} className="text-6xl animate-confettiFall" style={{ animationDelay: `${i * 0.2}s`, animationDuration: '2s' }}>{emoji}</div>
+            ))}
           </div>
-        )}
+        </div>
+      )}
 
-        {goalCelebration && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-            <ConfettiBurst active={true} />
-            <h1 className="text-8xl md:text-[150px] font-fredoka text-stella-red animate-tada text-shadow-cartoon">GOAL! ⚽</h1>
-            <div className="absolute inset-0 flex justify-around items-start overflow-hidden">
-              {['🎉', '⚽', '🍺', '🏆'].map((emoji, i) => (
-                <div key={i} className="text-6xl animate-confettiFall" style={{ animationDelay: `${i * 0.2}s`, animationDuration: '2s' }}>{emoji}</div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <HeroSection onEdClick={handleEdClick} />
-        <DestinationSection />
-        <ItinerarySection />
-        <FootballSection />
-        <PersonalNoteSection />
-        <GetYourLiverReadySection />
-        <FooterSection />
-      </div>
-    </HapticsContext.Provider>
+      <HeroSection onEdClick={handleEdClick} />
+      <DestinationSection />
+      <ItinerarySection />
+      <FootballSection />
+      <PersonalNoteSection />
+      <GetYourLiverReadySection />
+      <FooterSection />
+    </div>
   );
 }
