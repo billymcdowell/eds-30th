@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, ReactNode, createContext, useContext } from 'react';
 import { useWebHaptics } from 'web-haptics/react';
 
-const TRIP_DATE = new Date('2026-06-15T12:00:00'); // Set a future date
 const BASE_URL = '/eds-30th/';
 
 const HapticsContext = createContext<{ trigger: (pattern?: any) => void }>({
@@ -18,7 +17,8 @@ function useScrollReveal(threshold = 0.15) {
       ([entry]) => {
         if (entry.isIntersecting) {
           setVisible(true);
-          trigger();
+          // Use a noticeable preset so haptics are obvious on scroll
+          trigger('nudge');
         }
       },
       { threshold }
@@ -436,7 +436,7 @@ const PersonalNoteSection = () => {
   const [refImg, imgVisible] = useScrollReveal();
   const [refText, textVisible] = useScrollReveal();
   const [typedText, setTypedText] = useState('');
-  const fullText = "Happy 30th Birthday, mate! We've had some epic times over the years, from the Etihad to the pub. Now it's time to take the celebrations international. Think pints outside the Stella brewery in Leuven, wandering the Grand Place at night, demolishing waffles by Manneken Pis, waving flags at the Royal Palace and messing about at the Atomium. Pack your bags, practice your Belgian, and get ready for a weekend of pure Stella-fuelled chaos. You deserve it!";
+  const fullText = "Happy 30th Birthday, mate! We've had some epic times over the years, from fucking about in maths to the sweaty warehouse project. Now its time for your pilgramage to you very own Makkah. Think pints outside the Stella brewery in Leuven. Pack your bags, practice your Belgian, and get ready for a weekend of pure Stella-fuelled chaos. You deserve it! Lots of love, Ed";
   const [emojis, setEmojis] = useState<{id: number, emoji: string, left: number}[]>([]);
 
   useEffect(() => {
@@ -607,7 +607,7 @@ const StickyHeader = () => {
         </div>
         <div className="flex-1 overflow-hidden mx-4">
           <div className="animate-marqueeScroll-mobile md:animate-none md:text-center whitespace-nowrap">
-            Leuven, Belgium | {TRIP_DATE.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+            Leuven, Belgium
           </div>
         </div>
         <div className="animate-starSpin text-xl">⭐</div>
